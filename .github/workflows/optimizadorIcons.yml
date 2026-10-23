@@ -1,0 +1,45 @@
+name: Optimizar e Iconos SVG Automáticos
+
+on:
+  push:
+    branches:
+      - main # O el nombre de tu rama principal
+    paths:
+      - 'src/icons/**' # Solo se ejecuta si cambias archivos en tu carpeta de iconos
+  workflow_dispatch: # Ejecutar manualmente desde el Panel de Github
+    
+jobs:
+  optimize:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Descargar el código del repositorio
+    - name: Checkout del repositorio
+      uses: actions/checkout@v4
+
+    # 2. Configurar el entorno Node.js oficial
+    - name: Configurar Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-node-version: '20'
+
+    # 3. Instalar las dependencias de tu package.json
+    - name: Instalar dependencias
+      run: npm install
+
+    # 4. Ejecutar tu script personalizado
+    - name: Ejecutar script de optimización
+      run: node optimizador-imgsvg.js
+
+    # 5. Hacer commit y push de los cambios de vuelta al repositorio de forma nativa
+    - name: Auto-commit de iconos optimizados
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git add src/icons/*.svg
+        if ! git diff --cached --quiet; then
+          git commit -m "chore: optimizar y redimensionar iconos SVG automáticamente [skip ci]"
+          // git push
+        else
+          echo "No se encontraron cambios en los SVGs."
+        fi
