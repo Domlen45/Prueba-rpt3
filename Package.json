@@ -1,0 +1,9 @@
+{
+  "name": "svg-optimizer",
+  "version": "1.0.0",
+  "description": "Optimización propia de SVGs",
+  "main": "optimize-svgs.js",
+  "dependencies": {
+    "svgo": "^3.3.2"
+  }
+}
